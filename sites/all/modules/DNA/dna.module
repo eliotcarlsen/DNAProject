@@ -1,0 +1,70 @@
+<?php
+function dna_menu(){
+    $items['dna'] = array(
+        'title' => 'DNA',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('dna_form'),
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['dna_success_page'] = array(
+        'title' => 'Success',
+        'page callback' => 'dna_success',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+function dna_form(){
+    $form['string'] = array(
+        '#title' => 'string',
+        '#type' => 'textfield',
+        '#element_validate' => array('element_validate_string'),
+        '#description' => t('Enter 1/2 of the double helix.'),
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'DNA',
+    );
+    return $form;
+}
+function element_validate_string($element){
+    $result = preg_match("/[bdefhijklmnopqrsuvwxyzBDEFHIJKLMNOPQRSUVWXYZ]/",$element['#value'], $matches);
+    if ($result > 0){
+        form_error($element, t('You must enter a valid 1/2 helix string section.'));
+    }
+}
+function make_upper_case($input){
+    $DNA = strtoupper($input);
+    return $DNA;
+}
+function convert_helix($input){
+    $result = array();
+    $split = str_split($input);
+    for($i=0;$i<sizeof($split);$i++){
+        if($split[$i] == "A"){
+            array_push($result, "T");
+        } elseif ($split[$i] == "T"){
+            array_push($result, "A");
+        } elseif ($split[$i] == "C"){
+            array_push($result, "G");
+        } elseif ($split[$i] == "G"){
+            array_push($result, "C");
+        }
+    }
+    $string = join('', $result);
+    return $string;
+}
+
+function dna_form_submit($form, &$form_state){
+    $dna = $form_state['values']['string'];
+    $DNA = make_upper_case($dna);
+    $_SESSION['dna_input'] = $DNA;
+    $_SESSION['dna_output'] = convert_helix($DNA);
+    $form_state['redirect'] = 'dna_success_page';
+}
+function dna_success(){
+    $answer = $_SESSION['dna_input'];
+    $answer2 = $_SESSION['dna_output'];
+    return $answer . "<br>" . $answer2;
+}

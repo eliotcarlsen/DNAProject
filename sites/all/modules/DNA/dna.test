@@ -1,0 +1,64 @@
+<?php
+class DNATestCase extends DrupalUnitTestCase
+{
+
+    public static function getInfo()
+    {
+        return array(
+        'name' => 'DNA Tests',
+        'description' => 'Test that my DNA module works properly.',
+        'group' => 'Epicodus Examples Tests',
+        );
+    }
+
+    function testDNA()
+    {
+        $description = 'One letter will become capitalized.';
+        $input = 'a';
+        $result = make_upper_case($input);
+        $expected_output = 'A';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'Two letters will become capitalized.';
+        $input = 'ac';
+        $result = make_upper_case($input);
+        $expected_output = 'AC';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'Three letters will become capitalized.';
+        $input = 'act';
+        $result = make_upper_case($input);
+        $expected_output = 'ACT';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'One "a" letter will be converted to its dna counterpart.';
+        $input = make_upper_case('a');
+        $result = convert_helix($input);
+        $expected_output = 'T';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'One letter (t) will be converted to its dna counterpart.';
+        $input = make_upper_case('t');
+        $result = convert_helix($input);
+        $expected_output = 'A';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'One letter (c) will be converted to its dna counterpart.';
+        $input = make_upper_case('c');
+        $result = convert_helix($input);
+        $expected_output = 'G';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'One letter (g) will be converted to its dna counterpart.';
+        $input = make_upper_case('g');
+        $result = convert_helix($input);
+        $expected_output = 'C';
+        $this->assertEqual($result, $expected_output, $description);
+
+        $description = 'More than one letter will be converted to its dna counterpart.';
+        $input = make_upper_case('tac');
+        $result = convert_helix($input);
+        $expected_output = 'ATG';
+        $this->assertEqual($result, $expected_output, $description);
+    }
+}

@@ -62,3 +62,20 @@ class DNATestCase extends DrupalUnitTestCase
         $this->assertEqual($result, $expected_output, $description);
     }
 }
+class DNATests extends DrupalWebTestCase {
+    public static function getInfo() {
+        return array(
+            'name' => 'DNA Tests',
+            'description' => 'Tests the DNA module.',
+            'group' => 'Epicodus Examples Tests',
+        );
+    }
+    public function setUp() {
+        parent::setUp(array('dna'));
+    }
+    public function testDNAModule() {
+        $this->drupalGet('dna');
+        $this->assertText('DNA', 'The text on the page is correct.');
+    }
+    
+}
